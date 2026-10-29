@@ -1,0 +1,105 @@
+# Security Exclusions (KT Vault V3 - Phase 15B-2A)
+# 1. Logs and Diagnostic Traces
+*.log
+nav_trace.log
+*.tmp
+*.bak
+
+# 2. Restricted Evidence & Backups
+backups/
+security_evidence_restricted/
+
+# 3. Document Storage (Private Customer PII)
+documents/
+*.pdf
+*.jpg
+*.jpeg
+*.png
+
+# 4. SQLite Database & Transient Files
+data/
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# 5. Secrets, Keys, and Configuration
+*.key
+*.pem
+*.secret
+*.cert
+*.crt
+*.dpapi
+*.escrow
+.keys/
+*/.keys/
+.env
+.streamlit/secrets.toml
+
+# 6. Python Runtime & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# KT Vault V3 - Public GitHub Safety Exclusions
+backups*/
+scratch/
+reports/
+deployment_package/
+demo_documents/
+
+# Environment and credentials
+config/*.env
+config/*.env.*
+.env.*
+*.p12
+*.pfx
+*.kdbx
+*.ktbak
+
+# Archives and local environments
+*.zip
+*.7z
+.venv/
+venv/
+env/
+.vscode/
+
+# Additional KT Vault deployment safeguards
+.gitignore.backup
+backups*/
+*.backup
+*.backup.*
+*.sqlite-*
+*.db-*
+*.db.*
+*.jsonl
+*.log.*
+*.p12
+*.pfx
+*.pyd
+*.so
+*.dll
+
+# Private credentials and generated key material
+*.token
+*.credentials
+*.private
+*.seed
+*.enc
+*.encrypted
+*.age
+*.gpg
+*.asc
+*.pub
+id_rsa*
+id_ed25519*
+credentials.json
+service-account*.json
+
+# Local configuration and generated evidence
+.streamlit/secrets.*
+security_evidence*/

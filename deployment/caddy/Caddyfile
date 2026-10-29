@@ -1,0 +1,57 @@
+# =====================================================================
+# KHANNA TRAVELS — KT VAULT V3
+# Caddy Production Reverse Proxy Configuration (Automated TLS / HTTPS)
+# =====================================================================
+
+vault.khannatravels.internal {
+    # 1. Automated HTTPS with Local / Internal CA or Public ACME
+    # For internal corporate network:
+    tls internal
+
+    # 2. Hardened Security Headers
+    header {
+        # HTTP Strict Transport Security (HSTS)
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Prevent MIME-type sniffing
+        X-Content-Type-Options "nosniff"
+        # Cross-Origin frame protection (allow self for PDF previews)
+        X-Frame-Options "SAMEORIGIN"
+        # Referrer Policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        # Content Security Policy (permits local iframe pdf previews and websocket streaming)
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' ws: wss:; frame-src 'self' data: blob:;"
+        # Feature / Permissions Policy
+        Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+        # Remove Server signature
+        -Server
+    }
+
+    # 3. Maximum Upload Buffer Limit (50MB for Travel Pack Documents)
+    request_body {
+        max_size 52428800
+    }
+
+    # 4. Streamlit WebSocket Streaming Route
+    @websockets {
+        header Connection *Upgrade*
+        header Upgrade websocket
+    }
+    reverse_proxy @websockets 127.0.0.1:8501
+
+    # 5. Reverse Proxy to Local Streamlit Server
+    reverse_proxy 127.0.0.1:8501 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto https
+    }
+
+    # 6. Structured Access Logging
+    log {
+        output file C:\KT_Vault_V3\logs\caddy_access.log {
+            roll_size 10mb
+            roll_keep 10
+        }
+        format json
+    }
+}

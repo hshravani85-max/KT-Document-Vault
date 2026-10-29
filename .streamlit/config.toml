@@ -1,0 +1,21 @@
+[theme]
+base = "light"
+primaryColor = "#1A73E8"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F8FAFC"
+textColor = "#111827"
+
+[client]
+showSidebarNavigation = false
+
+[server]
+# Bind strictly to local loopback interface for reverse proxy isolation
+address = "127.0.0.1"
+port = 8501
+enableCORS = false
+enableXsrfProtection = true
+maxUploadSize = 50
+headless = true
+
+[browser]
+gatherUsageStats = false
